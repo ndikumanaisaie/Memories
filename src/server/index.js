@@ -3,9 +3,16 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import path from 'path';
 
-// To be edited
 import postRoute from './routes/posts.js';
+
+// const express = require('express');
+// const mongoose = require('mongoose');
+// const dotenv = require('dotenv');
+// const bodyParser = require('body-parser');
+// const cors = require('cors');
+// const path = require('path');
 
 dotenv.config();
 
@@ -21,11 +28,12 @@ database.on('connected', () => {
 	console.log('Database connected');
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 5000;
 
 const app = express();
 
-// To be edited
+app.use(express.static(path.resolve(process.cwd(), 'dist')));
+
 app.use('/posts', postRoute);
 
 app.use(bodyParser.json({ limit: '30mb', extended: true }));

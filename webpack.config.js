@@ -1,99 +1,92 @@
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
-const nodeExternals = require('webpack-node-externals');
+/* eslint-disable no-underscore-dangle */
+import webpack from 'webpack';
+import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { fileURLToPath } from 'url';
 
-module.exports = [
-	{
-		mode: 'development',
-		name: 'client',
-		entry: './src/client/index.js',
-		output: {
-			filename: '[name].js',
-			path: `${__dirname}/dist/client`,
-			chunkFilename: '[id].[chunkhash].js',
-		},
-		target: 'web',
-		module: {
-			rules: [
-				{
-					test: /\.css$/i,
-					use: ['style-loader', 'css-loader'],
-				},
-				{
-					test: /\.(jsx|js)$/,
-					include: path.resolve(__dirname, 'src'),
-					exclude: /node_modules/,
-					use: [{
-						loader: 'babel-loader',
-						options: {
-							presets: [
-								['@babel/preset-env', {
-									targets: 'defaults',
-								}],
-								'@babel/preset-react',
-							],
-							plugins: ['@babel/proposal-class-properties', '@babel/plugin-proposal-private-property-in-object', '@babel/plugin-proposal-private-methods'],
-						},
-					}],
-				},
-				{
-					test: /\.(png|jpe?g|gif)$/i,
-					use: [
-						{
-							loader: 'file-loader',
-						},
-					],
-				},
-			],
-		},
-		devServer: {
-			static: './dist',
-			historyApiFallback: true,
-			hot: true,
-		},
-		plugins: [
-			new HtmlWebpackPlugin({
-				template: './src/client/index.html',
-				excludeChunks: './src/server/index.js',
-			}),
-			new webpack.ProvidePlugin({
-				process: 'process/browser',
-			}),
-		],
-		optimization: {
-			runtimeChunk: 'single',
-		},
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+export default
+{
+	mode: 'development',
+	name: 'client',
+	entry: {
+		main: './src/client/index.js',
 	},
-
-	{
-		mode: 'development',
-		name: 'server',
-		entry: {
-			server: './src/server/index.js',
-		},
-		output: {
-			path: `${__dirname}/dist/server`,
-			filename: '[name].js',
-		},
-		target: 'node',
-		node: {
-			// Need this when working with express, otherwise the build fails
-			__dirname: false, // if you don't put this is, __dirname
-			__filename: false, // and __filename return blank or /
-		},
-		externals: [nodeExternals()], // Need this to avoid error when working with Express
-		module: {
-			rules: [
-				{
-					// Transpiles ES6-8 into ES5
-					test: /\.js$/,
-					exclude: /node_modules/,
-					use: {
-						loader: 'babel-loader',
+	experiments: {
+		outputModule: true,
+	},
+	output: {
+		filename: '[name].js',
+		path: path.resolve(__dirname, './dist'),
+		chunkFilename: '[id].[chunkhash].js',
+	},
+	devtool: 'source-map',
+	module: {
+		rules: [
+			{
+				test: /\.css$/i,
+				use: ['style-loader', 'css-loader'],
+			},
+			{
+				test: /\.(jsx|js)$/,
+				include: path.resolve(__dirname, 'src'),
+				exclude: /node_modules/,
+				use: [{
+					loader: 'babel-loader',
+					options: {
+						presets: [
+							['@babel/preset-env', {
+								targets: 'defaults',
+							}],
+							'@babel/preset-react',
+						],
+						plugins: ['@babel/proposal-class-properties', '@babel/plugin-proposal-private-property-in-object', '@babel/plugin-proposal-private-methods'],
 					},
-				},
-			],
+				}],
+			},
+			{
+				test: /\.(png|jpe?g|gif)$/i,
+				use: [
+					{
+						loader: 'file-loader',
+					},
+				],
+			},
+			{
+				// Loads the javacript into html template provided.
+				// Entry point is set below in HtmlWebPackPlugin in Plugins
+				test: /\.html$/,
+				use: [
+					{
+						loader: 'html-loader',
+						// options: { minimize: true }
+					},
+				],
+			},
+		],
+	},
+	devServer: {
+		port: 5000,
+		open: true,
+		static: './dist',
+		historyApiFallback: true,
+		hot: true,
+		proxy: {
+			'/posts': 'http://localhost:8080',
 		},
 	},
-];
+	plugins: [
+		new HtmlWebpackPlugin({
+			template: './src/client/index.html',
+			filename: './index.html',
+			excludeChunks: ['server'],
+		}),
+		new webpack.ProvidePlugin({
+			process: 'process/browser',
+		}),
+	],
+	optimization: {
+		runtimeChunk: 'single',
+	},
+};

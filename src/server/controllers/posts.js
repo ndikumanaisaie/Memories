@@ -1,28 +1,35 @@
-import PostMessage from "../models/postMessage.js";
+import PostMessage from '../models/postMessage.js';
+
+// export const getHtml = async (req, res) => {
+// 	try {
+// 		const postMessages = await PostMessage.find();
+
+// 		res.status(200).json(postMessages);
+// 	} catch (error) {
+// 		res.status(400).json({ message: error.message });
+// 	}
+// };
 
 export const getPosts = async (req, res) => {
- try {
-  const postMessages = await PostMessage.find();
+	try {
+		const postMessages = await PostMessage.find();
 
-  res.status(200).json(postMessages);
-
- } catch (error) {
-
-  res.status(400).json({message: error.message});
-
- }
+		res.status(200).json(postMessages);
+	} catch (error) {
+		res.status(400).json({ message: error.message });
+	}
 };
 
 export const createPost = async (req, res) => {
-  const post = req.body;
+	const post = req.body;
 
-  const newPost = new PostMessage(post);
+	const newPost = new PostMessage(post);
 
-  try {
-    await newPost.save();
+	try {
+		await newPost.save();
 
-    res.status(201).json(newPost)
-  } catch (error) {
-    res.status(409).json({message: error.message});
-  }
-}
+		res.status(201).json(newPost);
+	} catch (error) {
+		res.status(409).json({ message: error.message });
+	}
+};
