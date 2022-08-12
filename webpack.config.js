@@ -19,6 +19,7 @@ export default
 	output: {
 		filename: '[name].js',
 		path: path.resolve(__dirname, './dist'),
+		scriptType: 'text/javascript',
 		chunkFilename: '[id].[chunkhash].js',
 	},
 	devtool: 'source-map',
