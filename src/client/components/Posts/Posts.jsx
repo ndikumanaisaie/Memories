@@ -9,7 +9,6 @@ const Posts = () => (
 		<Post />
 		<Post />
 	</>
-
 );
 
 export default Posts;
