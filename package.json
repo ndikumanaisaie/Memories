@@ -53,6 +53,7 @@
     "process": "^0.11.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-file-base64": "^1.0.3",
     "react-horizontal-scrolling-menu": "^3.1.0",
     "react-icons": "^4.2.0",
     "react-loader-spinner": "^5.1.5",
@@ -67,7 +68,7 @@
   "scripts": {
     "format": "prettier-eslint --eslint-config-path ./.eslintrc.js --write '**/*.js'",
     "lint": "eslint . --ext .js .jsx",
-    "build": "webpack serve --open",
+    "build": "webpack --config webpack.config.js",
     "start": "npm run build && nodemon src/server/index.js",
     "client": "webpack-dev-server --mode development --devtool inline-source-map --hot",
     "server": "nodemon src/server/index.js",

@@ -1,27 +1,31 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+// import axios from 'axios';
 import { fetchPosts, createPost } from '../../api/index.js';
 
-export const getPosts = createAsyncThunk('posts/fetchPosts', async () => {
-	const response = await fetchPosts();
-	return response.data;
-});
-
-export const addNewPost = createAsyncThunk(
-	'posts/createPosts',
-	// The payload creator receives the partial `{creator, title, message, tags:[], selectedFile}`
-	async (initialPost) => {
-		// save the new post to the database
-		const response = await createPost(initialPost);
-		// The response from the database will include the complete object and assigned unique ID's
-		return response.data;
-	},
-);
+// const url = 'http://localhost:5000/posts';
 
 const initialState = {
 	posts: [],
 	isLoading: true,
 	error: null,
 };
+
+export const getPosts = createAsyncThunk('posts/getPosts', async () => {
+	const response = await fetchPosts();
+	return response.data;
+});
+
+export const addNewPost = createAsyncThunk(
+	'posts/addNewPost',
+	// The payload creator receives the partial `{creator, title, message, tags:[], selectedFile}`
+	async (newPost) => {
+		// save the new post to the database
+		const response = await createPost(newPost);
+
+		// The response from the database will include the complete object and assigned unique ID's
+		return response.data;
+	},
+);
 
 const postsSlice = createSlice({
 	name: 'posts',
@@ -42,6 +46,7 @@ const postsSlice = createSlice({
 				state.error = action.error.message;
 			})
 			.addCase(addNewPost.fulfilled, (state, action) => {
+				console.log(action.payload);
 				state.posts.push(action.payload);
 			});
 	},

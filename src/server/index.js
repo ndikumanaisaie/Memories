@@ -34,6 +34,8 @@ const app = express();
 
 app.use(express.static(path.resolve(process.cwd(), 'dist')));
 
+app.use(express.json());
+
 app.use('/posts', postRoute);
 
 app.use(bodyParser.json({ limit: '30mb', extended: true }));

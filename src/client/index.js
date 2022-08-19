@@ -11,7 +11,7 @@ import postsReducer from './features/posts/postsSlice.js';
 
 const store = configureStore({
 	reducer: {
-		post: postsReducer,
+		posts: postsReducer,
 	},
 });
 const root = createRoot(document.getElementById('root'));
