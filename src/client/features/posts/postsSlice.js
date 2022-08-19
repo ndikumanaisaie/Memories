@@ -1,8 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-// import axios from 'axios';
 import { fetchPosts, createPost } from '../../api/index.js';
-
-// const url = 'http://localhost:5000/posts';
 
 const initialState = {
 	posts: [],
@@ -46,7 +43,6 @@ const postsSlice = createSlice({
 				state.error = action.error.message;
 			})
 			.addCase(addNewPost.fulfilled, (state, action) => {
-				console.log(action.payload);
 				state.posts.push(action.payload);
 			});
 	},

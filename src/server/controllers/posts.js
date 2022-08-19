@@ -11,21 +11,6 @@ export const getPosts = async (req, res) => {
 };
 
 export const createPost = async (req, res) => {
-	// const data = new PostMessage({
-	// 	creator: req.body.creator,
-	// 	title: req.body.title,
-	// 	message: req.body.message,
-	// 	tags: req.body.tags,
-	// 	selectedFile: req.body.selectedFile,
-	// });
-
-	// try {
-	// 	const dataToSave = await data.save();
-	// 	res.status(200).json(dataToSave);
-	// } catch (error) {
-	// 	res.status(409).json({ message: error.message });
-	// }
-
 	const {
 		creator, title, message, tags, selectedFile,
 	} = req.body;
