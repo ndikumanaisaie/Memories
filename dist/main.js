@@ -25854,7 +25854,7 @@ const Posts = () => {
     spacing: 3
   }, posts.map(post => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_5__["default"], {
     key: post._id,
-    itmes: true,
+    itme: true,
     xs: 12,
     sm: 6
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Post_Post_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], {
