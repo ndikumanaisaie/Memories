@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import FileBase from 'react-file-base64';
 import {
 	TextField, Button, Typography, Paper,
 } from '@mui/material';
@@ -14,7 +15,6 @@ const Form = () => {
 	});
 
 	const posts = useSelector((store) => store.posts);
-
 	const dispatch = useDispatch();
 
 	const handleSubmit = async (e) => {
@@ -22,8 +22,11 @@ const Form = () => {
 		await dispatch(addNewPost(postData)).unwrap();
 	};
 
-	const clear = () => {
-
+	const clear = (e) => {
+		e.preventDefault();
+		setPostData({
+			creator: '', title: '', message: '', tags: '', selectedFile: '',
+		});
 	};
 
 	return (
@@ -34,7 +37,9 @@ const Form = () => {
 				<TextField name="title" variant="outlined" label="Title" fullWidth value={postData.title} onChange={ (e) => setPostData({ ...postData, title: e.target.value })} />
 				<TextField name="message" variant="outlined" label="message" fullWidth value={postData.message} onChange={ (e) => setPostData({ ...postData, message: e.target.value })} />
 				<TextField name="tags" variant="outlined" label="Tags" fullWidth value={postData.tags} onChange={ (e) => setPostData({ ...postData, tags: e.target.value })} />
-				<TextField name="selectedFile" variant="outlined" label="SelectedFile" fullWidth value={postData.selectedFile} onChange={ (e) => setPostData({ ...postData, selectedFile: e.target.value })} />
+				<div className="file-input">
+					<FileBase type="file" multiple={false} onDone={({ base64 }) => setPostData({ ...postData, selectedFile: base64 })} />
+				</div>
 				<Button className="btn-submit" variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>
 				<Button variant="contained" color="secondary" size="small" onClick={clear} fullWidth>Clear form</Button>
 			</form>

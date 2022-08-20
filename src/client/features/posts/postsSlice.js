@@ -36,7 +36,7 @@ const postsSlice = createSlice({
 			.addCase(getPosts.fulfilled, (state, action) => {
 				state.isLoading = false;
 				// Add any fetched posts to the array
-				state.posts.concat(action.payload);
+				state.posts = state.posts.concat(action.payload);
 			})
 			.addCase(getPosts.rejected, (state, action) => {
 				state.isLoading = false;
@@ -47,5 +47,6 @@ const postsSlice = createSlice({
 			});
 	},
 });
-console.log(postsSlice);
 export default postsSlice.reducer;
+
+export const selectAllPosts = (state) => state.posts.posts;

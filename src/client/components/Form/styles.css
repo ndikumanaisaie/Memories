@@ -12,3 +12,8 @@
 .btn-submit {
   margin-bottom: 10;
 }
+
+.file-input {
+  width: 97%;
+  margin: 10px 0;
+}
