@@ -25807,7 +25807,10 @@ const Post = _ref => {
   let {
     post
   } = _ref;
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, post.creator);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
+    src: post.selectedFile,
+    alt: post.title
+  }));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Post);
@@ -25854,7 +25857,7 @@ const Posts = () => {
     spacing: 3
   }, posts.map(post => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_5__["default"], {
     key: post._id,
-    itme: true,
+    item: true,
     xs: 12,
     sm: 6
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_Post_Post_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], {
