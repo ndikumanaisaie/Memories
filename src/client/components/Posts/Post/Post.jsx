@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import {
 	Card, CardHeader, CardMedia, CardActions, CardContent, Button, Typography,
 } from '@mui/material';
@@ -8,36 +9,39 @@ import moment from 'moment';
 
 import './style.css';
 
-const Post = ({ post }) => (
-	<Card className="card">
-		<CardMedia className="media" image={post.selectedFile} title={post.title} />
-		<div className="overlay">
-			<Typography variant="h6">{post.creator}</Typography>
-			<Typography variant="body2">{moment(post.createdAt).fromNow()}</Typography>
-		</div>
-		<div className="overlay2">
-			<Button variant="h6" style={{ color: 'white' }} size="small" onClick={() => {}} >
-				<MoreHorizOutlined fontSize="default" />
-			</Button>
-		</div>
-		<div className="details">
-			<Typography variant="body2" color="textSecondary">{post.tags.map((tag) => `#${tag}`)}</Typography>
-		</div>
+const Post = ({ post }) => {
+	const dispatch = useDispatch();
+	return (
+		<Card className="card">
+			<CardMedia className="media" image={post.selectedFile} title={post.title} />
+			<div className="overlay">
+				<Typography variant="h6">{post.creator}</Typography>
+				<Typography variant="body2">{moment(post.createdAt).fromNow()}</Typography>
+			</div>
+			<div className="overlay2">
+				<Button variant="h6" style={{ color: 'white' }} size="small" onClick={() => {}} >
+					<MoreHorizOutlined fontSize="default" />
+				</Button>
+			</div>
+			<div className="details">
+				<Typography variant="body2" color="textSecondary">{post.tags.map((tag) => `#${tag}`)}</Typography>
+			</div>
 
-		<Typography className="title" variant="h5" gutterBottom>{post.title}</Typography>
+			<Typography className="title" variant="h5" gutterBottom>{post.title}</Typography>
 
-		<CardContent>
-			<Typography className="message" variant="body2" >{post.message}</Typography>
-		</CardContent>
-		<CardActions className="card-actions">
-			<Button variant="h6" color="primary" size="small" onClick={() => {}} >
-				<ThumbUpAltOutlined fontSize="default" /> Like
-			</Button>
-			<Button variant="h6" color="primary" size="small" onClick={() => {}} >
-				<DeleteOutlined fontSize="default" /> Delete
-			</Button>
-		</CardActions>
-	</Card>
-);
+			<CardContent>
+				<Typography className="message" variant="body2" >{post.message}</Typography>
+			</CardContent>
+			<CardActions className="card-actions">
+				<Button variant="h6" color="primary" size="small" onClick={() => {}} >
+					<ThumbUpAltOutlined fontSize="default" /> Like
+				</Button>
+				<Button variant="h6" color="primary" size="small" onClick={() => {}} >
+					<DeleteOutlined fontSize="default" /> Delete
+				</Button>
+			</CardActions>
+		</Card>
+	);
+};
 
 export default Post;

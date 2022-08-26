@@ -26563,14 +26563,14 @@ const Post = _ref => {
     onClick: () => {}
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_icons_material__WEBPACK_IMPORTED_MODULE_10__["default"], {
     fontSize: "default"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], {
+  }), " Like"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_6__["default"], {
     variant: "h6",
     color: "primary",
     size: "small",
     onClick: () => {}
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_icons_material__WEBPACK_IMPORTED_MODULE_11__["default"], {
     fontSize: "default"
-  }))));
+  }), " Delete")));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Post);

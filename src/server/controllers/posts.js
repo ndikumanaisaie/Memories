@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-unused-vars */
 import mongoose from 'mongoose';
 import PostMessage from '../models/postMessage.js';
@@ -33,10 +34,20 @@ export const createPost = async (req, res) => {
 export const updatePost = async (req, res) => {
 	try {
 		const { id: _id } = req.params;
-		const post = req.body;
+
+		const {
+			creator, title, message, tags, selectedFile,
+		} = req.body;
 
 		if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No post with that id');
+
+		const updatedPost = {
+			creator, title, message, tags, selectedFile, id: _id,
+		};
+
+		await PostMessage.findByIdAndUpdate(_id, updatedPost, { new: true });
+		res.json(updatedPost);
 	} catch (error) {
 		console.log(error);
 	}
-}
+};
