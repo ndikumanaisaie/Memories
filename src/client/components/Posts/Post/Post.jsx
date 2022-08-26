@@ -29,6 +29,14 @@ const Post = ({ post }) => (
 		<CardContent>
 			<Typography className="message" variant="h5" gutterBottom>{post.message}</Typography>
 		</CardContent>
+		<CardActions>
+			<Button variant="h6" color="primary" size="small" onClick={() => {}} >
+				<ThumbUpAltOutlined fontSize="default" />
+			</Button>
+			<Button variant="h6" color="primary" size="small" onClick={() => {}} >
+				<DeleteOutlined fontSize="default" />
+			</Button>
+		</CardActions>
 	</Card>
 );
 
