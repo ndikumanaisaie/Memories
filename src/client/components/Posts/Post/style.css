@@ -46,11 +46,12 @@
   margin: 20px;
 }
 
+.message,
 .title {
   padding: 0 16px;
 }
 
-.cardActions {
+.card-actions {
   padding: 0 16px 8px 16px;
   display: flex;
   justify-content: space-between;
