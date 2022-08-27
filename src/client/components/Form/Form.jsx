@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -7,19 +8,27 @@ import {
 } from '@mui/material';
 
 import './styles.css';
-import { addNewPost } from '../../features/posts/postsSlice.js';
+import { addNewPost, editPost } from '../../features/posts/postsSlice.js';
 
 const Form = () => {
 	const [postData, setPostData] = useState({
 		creator: '', title: '', message: '', tags: '', selectedFile: '',
 	});
 
-	const posts = useSelector((store) => store.posts);
+	const postId = useSelector((state) => state.posts.currentId);
 	const dispatch = useDispatch();
+
+	const currentPost = useSelector((state) => (postId ? state.posts.posts
+		.find((post) => post._id === postId) : null));
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		await dispatch(addNewPost(postData)).unwrap();
+
+		if (postId) {
+			dispatch(editPost(currentPost, postId));
+		} else {
+			await dispatch(addNewPost(postData)).unwrap();
+		}
 	};
 
 	const clear = (e) => {

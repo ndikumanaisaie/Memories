@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -9,6 +10,8 @@ import moment from 'moment';
 
 import './style.css';
 
+import { getCurrentId } from '../../../features/posts/postsSlice.js';
+
 const Post = ({ post }) => {
 	const dispatch = useDispatch();
 	return (
@@ -19,7 +22,7 @@ const Post = ({ post }) => {
 				<Typography variant="body2">{moment(post.createdAt).fromNow()}</Typography>
 			</div>
 			<div className="overlay2">
-				<Button variant="h6" style={{ color: 'white' }} size="small" onClick={() => {}} >
+				<Button variant="h6" style={{ color: 'white' }} size="small" onClick={() => dispatch(getCurrentId(post._id))} >
 					<MoreHorizOutlined fontSize="default" />
 				</Button>
 			</div>

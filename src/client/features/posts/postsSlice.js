@@ -1,10 +1,11 @@
+/* eslint-disable no-underscore-dangle */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchPosts, createPost } from '../../api/index.js';
+import { fetchPosts, createPost, updatePost } from '../../api/index.js';
 
 const initialState = {
 	posts: [],
 	isLoading: true,
-	error: null,
+	currentId: null,
 };
 
 export const getPosts = createAsyncThunk('posts/getPosts', async () => {
@@ -23,11 +24,27 @@ export const addNewPost = createAsyncThunk(
 		return response.data;
 	},
 );
+export const editPost = createAsyncThunk(
+	'posts/editPost',
+	// The payload creator receives the updatedPost and its Id
+	async (updatedPost, id) => {
+		// update the post with the specified Id
+		const response = await updatePost(id, updatedPost);
+
+		// The response from the database will include the complete object and assigned unique ID's
+		return response.data;
+	},
+);
 
 const postsSlice = createSlice({
 	name: 'posts',
 	initialState,
-	reducers: {},
+	reducers: {
+		getCurrentId(state, action) {
+			state.currentId = action.payload;
+			console.log(state.currentId);
+		},
+	},
 	extraReducers(builder) {
 		builder
 			.addCase(getPosts.pending, (state) => {
@@ -44,9 +61,13 @@ const postsSlice = createSlice({
 			})
 			.addCase(addNewPost.fulfilled, (state, action) => {
 				state.posts.push(action.payload);
+			})
+			.addCase(editPost.fulfilled, (state, action) => {
+				state.posts.map((post) => (post._id === action.payload._id ? action.payload : post));
 			});
 	},
 });
+export const { getCurrentId } = postsSlice.actions;
 export default postsSlice.reducer;
 
 export const selectAllPosts = (state) => state.posts.posts;
