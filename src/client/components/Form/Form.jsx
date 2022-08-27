@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import FileBase from 'react-file-base64';
 import {
@@ -21,11 +21,15 @@ const Form = () => {
 	const currentPost = useSelector((state) => (postId ? state.posts.posts
 		.find((post) => post._id === postId) : null));
 
+	useEffect(() => {
+		if (currentPost) setPostData(currentPost);
+	}, [currentPost]);
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
 		if (postId) {
-			dispatch(editPost(currentPost, postId));
+			dispatch(editPost(postId, postData));
 		} else {
 			await dispatch(addNewPost(postData)).unwrap();
 		}
@@ -41,7 +45,7 @@ const Form = () => {
 	return (
 		<Paper className="paper">
 			<form autoComplete='off' noValidate className="form" onSubmit={handleSubmit}>
-				<Typography>Creating a memory</Typography>
+				<Typography> { postId ? 'Updating' : 'Creating' } a memory</Typography>
 				<TextField name="creator" variant="outlined" label="Creator" fullWidth value={postData.creator} onChange={ (e) => setPostData({ ...postData, creator: e.target.value })} />
 				<TextField name="title" variant="outlined" label="Title" fullWidth value={postData.title} onChange={ (e) => setPostData({ ...postData, title: e.target.value })} />
 				<TextField name="message" variant="outlined" label="message" fullWidth value={postData.message} onChange={ (e) => setPostData({ ...postData, message: e.target.value })} />

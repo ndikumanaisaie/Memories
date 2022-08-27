@@ -3,20 +3,14 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Grid, CircularProgress } from '@mui/material';
-import { getPosts, selectAllPosts } from '../../features/posts/postsSlice.js';
+import { selectAllPosts } from '../../features/posts/postsSlice.js';
 
 import Post from './Post/Post.jsx';
 
 const Posts = () => {
-	const posts = useSelector(selectAllPosts);
+	const posts = useSelector((state) => state.posts.posts);
 	const isLoading = useSelector((state) => state.posts.isLoading);
-
-	const dispatch = useDispatch();
-
-	useEffect(() => {
-		if (isLoading) dispatch(getPosts());
-	}, [isLoading, dispatch]);
-
+	console.log(posts);
 	return (
 		isLoading ? <CircularProgress /> : (
 			<Grid className="container" container alignItems="stretch" spacing={3} >

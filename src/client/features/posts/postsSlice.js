@@ -5,7 +5,7 @@ import { fetchPosts, createPost, updatePost } from '../../api/index.js';
 const initialState = {
 	posts: [],
 	isLoading: true,
-	currentId: null,
+	currentId: 0,
 };
 
 export const getPosts = createAsyncThunk('posts/getPosts', async () => {
@@ -27,10 +27,10 @@ export const addNewPost = createAsyncThunk(
 export const editPost = createAsyncThunk(
 	'posts/editPost',
 	// The payload creator receives the updatedPost and its Id
-	async (updatedPost, id) => {
+	async (id, updatedPost) => {
 		// update the post with the specified Id
 		const response = await updatePost(id, updatedPost);
-
+		console.log(response.data);
 		// The response from the database will include the complete object and assigned unique ID's
 		return response.data;
 	},
@@ -42,7 +42,6 @@ const postsSlice = createSlice({
 	reducers: {
 		getCurrentId(state, action) {
 			state.currentId = action.payload;
-			console.log(state.currentId);
 		},
 	},
 	extraReducers(builder) {
@@ -55,15 +54,16 @@ const postsSlice = createSlice({
 				// Add any fetched posts to the array
 				state.posts = state.posts.concat(action.payload);
 			})
-			.addCase(getPosts.rejected, (state, action) => {
+			.addCase(getPosts.rejected, (state) => {
 				state.isLoading = false;
-				state.error = action.error.message;
 			})
 			.addCase(addNewPost.fulfilled, (state, action) => {
 				state.posts.push(action.payload);
 			})
-			.addCase(editPost.fulfilled, (state, action) => {
-				state.posts.map((post) => (post._id === action.payload._id ? action.payload : post));
+			.addCase(editPost.fulfilled, (state, action) => state.posts
+				.map((post) => (post._id === action.payload._id ? action.payload : post)))
+			.addCase(editPost.rejected, (state) => {
+				state.isLoading = false;
 			});
 	},
 });
