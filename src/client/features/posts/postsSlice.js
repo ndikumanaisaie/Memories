@@ -1,11 +1,14 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-underscore-dangle */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchPosts, createPost, updatePost } from '../../api/index.js';
+import {
+	fetchPosts, createPost, updatePost, deletePost,
+} from '../../api/index.js';
 
 const initialState = {
 	posts: [],
 	isLoading: true,
-	currentId: 0,
+	currentId: '',
 };
 
 export const getPosts = createAsyncThunk('posts/getPosts', async () => {
@@ -27,12 +30,23 @@ export const addNewPost = createAsyncThunk(
 export const editPost = createAsyncThunk(
 	'posts/editPost',
 	// The payload creator receives the updatedPost and its Id
-	async (id, updatedPost) => {
-		// update the post with the specified Id
-		const response = await updatePost(id, updatedPost);
-		console.log(response.data);
-		// The response from the database will include the complete object and assigned unique ID's
-		return response.data;
+	async ({ id, updatedPost }) => {
+		try {
+			// console.log(updatedPost);
+			const response = await updatePost(id, updatedPost);
+			// The response from the database will include the complete object and assigned unique ID's
+			return response.data;
+		} catch (error) {
+			console.log(error);
+		}
+	},
+);
+
+export const removePost = createAsyncThunk(
+	'posts/removePost',
+	async ({ id }) => {
+		await deletePost(id);
+		return { id };
 	},
 );
 
@@ -60,10 +74,24 @@ const postsSlice = createSlice({
 			.addCase(addNewPost.fulfilled, (state, action) => {
 				state.posts.push(action.payload);
 			})
-			.addCase(editPost.fulfilled, (state, action) => state.posts
-				.map((post) => (post._id === action.payload._id ? action.payload : post)))
+			.addCase(editPost.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(editPost.fulfilled, (state, action) => {
+				state.isLoading = false;
+				// console.log(action.payload);
+				const index = state.posts.findIndex((post) => post._id === action.payload._id);
+				state.posts[index] = {
+					...state.posts[index],
+					...action.payload,
+				};
+			})
 			.addCase(editPost.rejected, (state) => {
 				state.isLoading = false;
+			})
+			.addCase(removePost.fulfilled, (state, action) => {
+				const index = state.posts.findIndex(({ id }) => id === action.payload._id);
+				state.splice(index, 1);
 			});
 	},
 });

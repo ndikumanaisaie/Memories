@@ -10,13 +10,13 @@ import moment from 'moment';
 
 import './style.css';
 
-import { getCurrentId } from '../../../features/posts/postsSlice.js';
+import { getCurrentId, removePost } from '../../../features/posts/postsSlice.js';
 
 const Post = ({ post }) => {
 	const dispatch = useDispatch();
 	return (
 		<Card className="card">
-			<CardMedia className="media" image={post.selectedFile} title={post.title} />
+			<CardMedia className="media" component='img' image={post.selectedFile} title={post.title} />
 			<div className="overlay">
 				<Typography variant="h6">{post.creator}</Typography>
 				<Typography variant="body2">{moment(post.createdAt).fromNow()}</Typography>
@@ -27,7 +27,7 @@ const Post = ({ post }) => {
 				</Button>
 			</div>
 			<div className="details">
-				<Typography variant="body2" color="textSecondary">{post.tags.map((tag) => `#${tag}`)}</Typography>
+				<Typography variant="body2" color="textSecondary">{post.tags.map((tag) => `#${tag} `)}</Typography>
 			</div>
 
 			<Typography className="title" variant="h5" gutterBottom>{post.title}</Typography>
@@ -39,7 +39,7 @@ const Post = ({ post }) => {
 				<Button variant="h6" color="primary" size="small" onClick={() => {}} >
 					<ThumbUpAltOutlined fontSize="default" /> Like
 				</Button>
-				<Button variant="h6" color="primary" size="small" onClick={() => {}} >
+				<Button variant="h6" color="primary" size="small" onClick={() => dispatch(removePost(post._id))} >
 					<DeleteOutlined fontSize="default" /> Delete
 				</Button>
 			</CardActions>
