@@ -26383,8 +26383,8 @@ const Form = () => {
     selectedFile: ''
   });
   let currentId = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => state.posts.currentId);
-  const dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)();
-  console.log(typeof currentId);
+  const dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)(); // console.log(typeof currentId);
+
   const currentPost = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(state => currentId ? state.posts.posts.find(post => post._id === currentId) : null);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (currentPost) setPostData(currentPost);
@@ -26410,7 +26410,7 @@ const Form = () => {
     } else {
       dispatch((0,_features_posts_postsSlice_js__WEBPACK_IMPORTED_MODULE_4__.editPost)({
         id: currentId,
-        ...postData
+        data: postData
       })).unwrap().then(reponse => {
         console.log(reponse);
       }).catch(e => {
@@ -26587,7 +26587,9 @@ const Post = _ref => {
     variant: "h6",
     color: "primary",
     size: "small",
-    onClick: () => {}
+    onClick: () => dispatch((0,_features_posts_postsSlice_js__WEBPACK_IMPORTED_MODULE_4__.removePost)({
+      id: post._id
+    }))
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_icons_material__WEBPACK_IMPORTED_MODULE_13__["default"], {
     fontSize: "default"
   }), " Delete")));
@@ -26632,7 +26634,7 @@ const Posts = () => {
     container: true,
     alignItems: "stretch",
     spacing: 3
-  }, posts.map(post => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_5__["default"], {
+  }, posts === null || posts === void 0 ? void 0 : posts.map(post => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_5__["default"], {
     key: post._id,
     item: true,
     xs: 12,
@@ -92323,6 +92325,7 @@ const App = () => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "createPost": () => (/* binding */ createPost),
+/* harmony export */   "deletePost": () => (/* binding */ deletePost),
 /* harmony export */   "fetchPosts": () => (/* binding */ fetchPosts),
 /* harmony export */   "updatePost": () => (/* binding */ updatePost)
 /* harmony export */ });
@@ -92344,7 +92347,8 @@ const updatePost = /*#__PURE__*/function () {
   return function updatePost(_x, _x2) {
     return _ref.apply(this, arguments);
   };
-}(); // // console.log(updatedPost);
+}();
+const deletePost = id => axios__WEBPACK_IMPORTED_MODULE_1__["delete"]("".concat(url, "/").concat(id)); // // console.log(updatedPost);
 // if (response.data) {
 // 	return {
 // 		...(await response).data, id,
@@ -92366,6 +92370,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "editPost": () => (/* binding */ editPost),
 /* harmony export */   "getCurrentId": () => (/* binding */ getCurrentId),
 /* harmony export */   "getPosts": () => (/* binding */ getPosts),
+/* harmony export */   "removePost": () => (/* binding */ removePost),
 /* harmony export */   "selectAllPosts": () => (/* binding */ selectAllPosts)
 /* harmony export */ });
 /* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js");
@@ -92413,7 +92418,7 @@ function () {
     } = _ref4;
 
     try {
-      // console.log(updatedPost);
+      console.log(updatedPost);
       const response = yield (0,_api_index_js__WEBPACK_IMPORTED_MODULE_1__.updatePost)(id, updatedPost); // The response from the database will include the complete object and assigned unique ID's
 
       return response.data;
@@ -92424,6 +92429,26 @@ function () {
 
   return function (_x2) {
     return _ref3.apply(this, arguments);
+  };
+}());
+const removePost = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.createAsyncThunk)('posts/removePost', /*#__PURE__*/function () {
+  var _ref5 = (0,_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_0__["default"])(function* (_ref6) {
+    let {
+      id
+    } = _ref6;
+
+    try {
+      yield (0,_api_index_js__WEBPACK_IMPORTED_MODULE_1__.deletePost)(id);
+      return {
+        id
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  return function (_x3) {
+    return _ref5.apply(this, arguments);
   };
 }());
 const postsSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.createSlice)({
@@ -92450,14 +92475,22 @@ const postsSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_2__.createSlice)
     }).addCase(editPost.pending, state => {
       state.isLoading = true;
     }).addCase(editPost.fulfilled, (state, action) => {
-      state.isLoading = false;
-      console.log(action.payload);
+      state.isLoading = false; // console.log(action.payload);
+
       const index = state.posts.findIndex(post => post._id === action.payload._id);
       state.posts[index] = { ...state.posts[index],
         ...action.payload
       };
     }).addCase(editPost.rejected, state => {
       state.isLoading = false;
+    }).addCase(removePost.fulfilled, (state, action) => {
+      const index = state.posts.findIndex(_ref7 => {
+        let {
+          id
+        } = _ref7;
+        return id === action.payload._id;
+      });
+      state.posts.splice(index, 1);
     });
   }
 

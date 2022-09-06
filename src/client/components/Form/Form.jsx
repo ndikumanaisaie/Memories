@@ -41,7 +41,7 @@ const Form = () => {
 			dispatch(addNewPost(postData));
 			clear();
 		} else {
-			dispatch(editPost({ id: currentId, postData }))
+			dispatch(editPost({ id: currentId, data: postData }))
 				.unwrap()
 				.then((reponse) => {
 					console.log(reponse);

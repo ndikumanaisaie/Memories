@@ -32,7 +32,7 @@ export const editPost = createAsyncThunk(
 	// The payload creator receives the updatedPost and its Id
 	async ({ id, updatedPost }) => {
 		try {
-			// console.log(updatedPost);
+			console.log(updatedPost);
 			const response = await updatePost(id, updatedPost);
 			// The response from the database will include the complete object and assigned unique ID's
 			return response.data;
@@ -45,8 +45,12 @@ export const editPost = createAsyncThunk(
 export const removePost = createAsyncThunk(
 	'posts/removePost',
 	async ({ id }) => {
-		await deletePost(id);
-		return { id };
+		try {
+			await deletePost(id);
+			return { id };
+		} catch (error) {
+			console.log(error);
+		}
 	},
 );
 
@@ -91,7 +95,7 @@ const postsSlice = createSlice({
 			})
 			.addCase(removePost.fulfilled, (state, action) => {
 				const index = state.posts.findIndex(({ id }) => id === action.payload._id);
-				state.splice(index, 1);
+				state.posts.splice(index, 1);
 			});
 	},
 });

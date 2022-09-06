@@ -39,7 +39,7 @@ const Post = ({ post }) => {
 				<Button variant="h6" color="primary" size="small" onClick={() => {}} >
 					<ThumbUpAltOutlined fontSize="default" /> Like
 				</Button>
-				<Button variant="h6" color="primary" size="small" onClick={() => dispatch(removePost(post._id))} >
+				<Button variant="h6" color="primary" size="small" onClick={() => dispatch(removePost({ id: post._id }))} >
 					<DeleteOutlined fontSize="default" /> Delete
 				</Button>
 			</CardActions>
